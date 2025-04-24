@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>GrantMaster - Drag and Drop Filing Game</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f4f4f4; padding: 20px; }
+    h1 { color: #2c3e50; }
+    .container { display: flex; gap: 20px; margin-top: 20px; }
+    .documents, .folders { flex: 1; }
+    .doc, .folder { padding: 10px; margin: 10px 0; background: #fff; border: 1px solid #ccc; border-radius: 8px; cursor: grab; }
+    .folder { background: #ecf0f1; min-height: 100px; }
+    .folder.over { border: 2px dashed #3498db; }
+  </style>
+</head>
+<body>
+  <h1>📂 GrantMaster: Drag & Drop Filing Game</h1>
+  <p>Drag the documents to the correct folder:</p>
+
+  <div class="container">
+    <div class="documents">
+      <div class="doc" draggable="true" id="doc1">Payslip</div>
+      <div class="doc" draggable="true" id="doc2">Boarding Pass</div>
+      <div class="doc" draggable="true" id="doc3">Sign-In Sheet</div>
+      <div class="doc" draggable="true" id="doc4">Stationery Invoice</div>
+    </div>
+    <div class="folders">
+      <div class="folder" id="HR Records">HR Records</div>
+      <div class="folder" id="Travel Docs">Travel Docs</div>
+      <div class="folder" id="Invoices">Invoices</div>
+      <div class="folder" id="Event Materials">Event Materials</div>
+    </div>
+  </div>
+
+  <script>
+    const docs = document.querySelectorAll('.doc');
+    const folders = document.querySelectorAll('.folder');
+
+    docs.forEach(doc => {
+      doc.addEventListener('dragstart', () => {
+        doc.classList.add('dragging');
+        event.dataTransfer.setData('text/plain', doc.id);
+      });
+    });
+
+    folders.forEach(folder => {
+      folder.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        folder.classList.add('over');
+      });
+
+      folder.addEventListener('dragleave', () => {
+        folder.classList.remove('over');
+      });
+
+      folder.addEventListener('drop', (e) => {
+        e.preventDefault();
+        const id = e.dataTransfer.getData('text/plain');
+        const doc = document.getElementById(id);
+        folder.appendChild(doc);
+        folder.classList.remove('over');
+      });
+    });
+  </script>
+</body>
+</html>
